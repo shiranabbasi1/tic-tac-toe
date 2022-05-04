@@ -24,8 +24,35 @@ function Square (props) {
       };
     }
 
+    checkWinner() {
+      var winningCOmbinations = [
+        [0, 1, 2],
+        [3, 4, 5],
+        [6, 7, 8],
+        [0, 3, 6],
+        [1, 4, 7],
+        [2, 5, 8],
+        [0, 4, 8],
+        [2, 4, 6]
+      ];
+
+      for (var i = 0; i < winningCOmbinations.length; i++) {
+        var [a, b, c] = winningCOmbinations[i].map(x => this.state.squares[x]);
+        if (a
+          && (a === b)
+          && (a === c)) {
+            return a;
+          }
+      }
+      return null;
+    }
+
     handleClick(i) {
       var squares = this.state.squares.slice();
+      if (squares[i]
+        || this.checkWinner()) {
+          return;
+        }
       squares[i] = this.state.xIsNext ? 'X' : 'O';
       this.setState({
         squares: squares,
@@ -43,7 +70,14 @@ function Square (props) {
     }
   
     render() {
-      const status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
+      const winner = this.checkWinner();
+      let status;
+      if (winner) {
+        status = "Winner: " + winner;
+      }
+      else {
+        status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
+      }
   
       return (
         <div>
