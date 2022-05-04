@@ -53,7 +53,10 @@ class Game extends React.Component {
     this.state = {
       xIsNext: true,
       history: [
-        Array(9).fill(null)
+        {
+          squares: Array(9).fill(null),
+          move: [-1, -1]
+        }
       ],
       stepNumber: 0
     };
@@ -61,15 +64,21 @@ class Game extends React.Component {
 
   handleClick(i) {
     const history = this.state.history.slice(0, this.state.stepNumber + 1);
-    var current = history[history.length - 1];
+    var current = history[history.length - 1].squares;
     var squares = current.slice();
     if (squares[i]
       || this.checkWinner(current)) {
         return;
       }
     squares[i] = this.state.xIsNext ? 'X' : 'O';
+    const row = (Math.sqrt(squares.length) * Math.ceil((i + 1)/Math.sqrt(squares.length))) / Math.sqrt(squares.length);
+    let col = (i + 1) % (Math.sqrt(squares.length));
+    col = (col === 0) ? 3 : col;
     this.setState({
-      history: history.concat([squares]),
+      history: history.concat({
+        squares: squares,
+        move: [row, col]
+      }),
       xIsNext: !this.state.xIsNext,
       stepNumber: history.length
     });
@@ -109,7 +118,7 @@ class Game extends React.Component {
 
     const history = this.state.history;
     const current = history[this.state.stepNumber];
-    const winner = this.checkWinner(current);
+    const winner = this.checkWinner(current.squares);
 
     let status;
     if (winner) {
@@ -119,7 +128,7 @@ class Game extends React.Component {
     }
 
     const moves = history.map((step, move) => {
-      const desc = move ? ("Go to move #" + move) : "Go to game start";
+      const desc = move ? ("Go to move #" + move + " (" + step.move[0] + ", " + step.move[1] + ")") : "Go to game start";
       return (
         <li key={move}>
           <button onClick={() => this.jumpTo(move)}>{desc}</button>
@@ -133,7 +142,7 @@ class Game extends React.Component {
           <Board
             onClick={(i) => this.handleClick(i)}
             xIsNext={this.state.xIsNext}
-            squares={this.state.history[this.state.stepNumber]}
+            squares={this.state.history[this.state.stepNumber].squares}
           />
         </div>
         <div className="game-info">
