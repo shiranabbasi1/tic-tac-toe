@@ -3,19 +3,16 @@ import { createRoot } from 'react-dom/client';
 import './index.css';
 
 
-class Square extends React.Component {
-
-    render() {
-      return (
-        <button
-          className="square"
-          onClick={() => this.props.onClick()}
-        >
-          {this.props.value}
-        </button>
-      );
-    }
-  }
+function Square (props) {
+  return (
+    <button
+      className="square"
+      onClick={props.onClick}
+    >
+      {props.value}
+    </button>
+  );
+}
   
   class Board extends React.Component {
 
@@ -23,15 +20,17 @@ class Square extends React.Component {
       super(props);
       this.state = {
         squares: Array(9).fill(null),
-        content: 'X'
+        xIsNext: true
       };
     }
 
     handleClick(i) {
       var squares = this.state.squares.slice();
-      squares[i] = this.state.content;
-      var content = (this.state.content === 'X') ? 'O' : 'X';
-      this.setState({squares: squares, content: content});
+      squares[i] = this.state.xIsNext ? 'X' : 'O';
+      this.setState({
+        squares: squares,
+        xIsNext: !this.state.xIsNext
+      });
     }
 
     renderSquare(i) {
@@ -44,7 +43,7 @@ class Square extends React.Component {
     }
   
     render() {
-      const status = 'Next player: ' + this.state.content;
+      const status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
   
       return (
         <div>
