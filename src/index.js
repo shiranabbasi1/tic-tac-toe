@@ -1,5 +1,6 @@
 import React from "react";
 import { createRoot } from 'react-dom/client';
+import Switch from '@mui/material/Switch';
 import './index.css';
 
 
@@ -60,9 +61,16 @@ class Game extends React.Component {
           move: [-1, -1]
         }
       ],
-      stepNumber: 0
+      stepNumber: 0,
+      moveASC: true
     };
   }
+
+  moveOrderChange() {
+    this.setState({
+      moveASC: !this.state.moveASC
+    });
+  };
 
   handleClick(i) {
     const history = this.state.history.slice(0, this.state.stepNumber + 1);
@@ -138,6 +146,9 @@ class Game extends React.Component {
         </li>
       );
     });
+    if (!this.state.moveASC) {
+      moves.reverse();
+    }
 
     return (
       <div className="game">
@@ -150,6 +161,10 @@ class Game extends React.Component {
         </div>
         <div className="game-info">
           <div>{status}</div>
+          <Switch
+            checked={this.state.moveASC}
+            onChange={() => this.moveOrderChange()}
+          />
           <ol>{moves}</ol>
         </div>
       </div>
