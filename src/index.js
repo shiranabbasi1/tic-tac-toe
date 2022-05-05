@@ -66,7 +66,8 @@ class Game extends React.Component {
         }
       ],
       stepNumber: 0,
-      moveASC: true
+      moveASC: true,
+      totalSteps: 9
     };
   }
 
@@ -135,13 +136,14 @@ class Game extends React.Component {
     const history = this.state.history;
     const current = history[this.state.stepNumber];
     const winners = this.checkWinner(current.squares);
-
+    let lost = false;
     let status;
     if (winners
       && winners.length) {
       status = 'Winner: ' + current.squares[winners[0]];
     } else {
       status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
+      lost = (this.state.stepNumber === this.state.totalSteps)
     }
 
     const moves = history.map((step, move) => {
@@ -159,6 +161,9 @@ class Game extends React.Component {
     return (
       <div className="game">
         <div className="game-board">
+        <div className={lost ? "" : "hidden"}>
+          <p className="bg-gold">Game drawn!</p>
+        </div>
           <Board
             onClick={(i) => this.handleClick(i)}
             xIsNext={this.state.xIsNext}

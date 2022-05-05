@@ -56,3 +56,11 @@ body {
   .win-box {
     background-color: lightsalmon;
   }
+
+  .bg-gold {
+    background-color: gold;
+  }
+
+  .hidden {
+    display: none;
+  }
