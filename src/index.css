@@ -52,3 +52,7 @@ body {
   .b-move button {
     font-weight: bold;
   }
+
+  .win-box {
+    background-color: lightsalmon;
+  }
