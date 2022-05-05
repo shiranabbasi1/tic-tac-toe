@@ -49,3 +49,6 @@ body {
     margin-left: 20px;
   }
   
+  .b-move button {
+    font-weight: bold;
+  }
